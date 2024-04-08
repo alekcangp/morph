@@ -3,7 +3,7 @@ import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
 // import { neynar } from 'frog/hubs'
 import { handle } from "frog/vercel";
-import { usdtAbi } from "./abi";
+import { usdtAbi } from "/abi";
 import { ethers } from "ethers";
 
 
