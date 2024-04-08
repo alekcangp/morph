@@ -4,7 +4,6 @@ import { serveStatic } from "frog/serve-static";
 //import { pinata } from "frog/hubs";
 import { handle } from "frog/vercel";
 import { ethers } from "ethers";
-//import { xmtpSupport } from "../middleware.js";
 
 const usdtAbi = [
   "function balanceOf(address) view returns (uint)",
@@ -34,6 +33,7 @@ export const app = new Frog({
   //hub: pinata(),
 });
 
+// XMTP support
 app.use("/*", async (c: any, next: any) => {
   await next();
   const isFrame = c.res.headers.get("content-type")?.includes("html");
