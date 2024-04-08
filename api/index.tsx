@@ -4,7 +4,7 @@ import { serveStatic } from "frog/serve-static";
 //import { pinata } from "frog/hubs";
 import { handle } from "frog/vercel";
 import { ethers } from "ethers";
-import { xmtpSupport } from "../middleware.js";
+//import { xmtpSupport } from "../middleware.js";
 
 const usdtAbi = [
   "function balanceOf(address) view returns (uint)",
@@ -27,14 +27,27 @@ const eth = ethers.parseEther("0.001");
 var fau = {};
 
 export const app = new Frog({
-  assetsPath: "/",
+  assetsPath: "/public",
   basePath: "/api",
   // Supply a Hub to enable frame verification.
   // hub: neynar({ apiKey: "NEYNAR_FROG_FM" }),
   //hub: pinata(),
 });
 
-app.use(xmtpSupport);
+app.use("/*", async (c: any, next: any) => {
+  await next();
+  const isFrame = c.res.headers.get("content-type")?.includes("html");
+  if (isFrame) {
+    let html = await c.res.text();
+    const metaTag = '<meta property="of:accepts:xmtp" content="vNext" />';
+    html = html.replace(/(<head>)/i, `$1${metaTag}`);
+    c.res = new Response(html, {
+      headers: {
+        "content-type": "text/html",
+      },
+    });
+  }
+});
 
 app.frame("/", (c) => {
   return c.res({
