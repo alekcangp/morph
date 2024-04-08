@@ -1,7 +1,7 @@
 import { Button, Frog, TextInput, parseEther } from "frog";
 import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
-// import { neynar } from 'frog/hubs'
+import { neynar } from 'frog/hubs'
 import { handle } from "frog/vercel";
 import { ethers } from "ethers";
 
@@ -31,7 +31,7 @@ export const app = new Frog({
   //browserLocation: '/html'
   
   // Supply a Hub to enable frame verification.
-  // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
+  hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
 });
 
 app.frame("/", (c) => {
