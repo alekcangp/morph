@@ -27,7 +27,7 @@ var fau = {};
 
 export const app = new Frog({
   assetsPath: "/",
-  basePath: "/",
+  basePath: "/api",
   //browserLocation: '/html'
   
   // Supply a Hub to enable frame verification.
