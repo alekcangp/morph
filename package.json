@@ -8,6 +8,7 @@
     "deploy": "vercel"
   },
   "dependencies": {
+    "@xmtp/frames-validator": "^0.6.0",
     "ethers": "^6.11.1",
     "frog": "latest",
     "hono": "^4"

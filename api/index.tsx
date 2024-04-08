@@ -4,6 +4,7 @@ import { serveStatic } from "frog/serve-static";
 //import { pinata } from "frog/hubs";
 import { handle } from "frog/vercel";
 import { ethers } from "ethers";
+import { xmtpSupport } from "../middleware.js";
 
 const usdtAbi = [
   "function balanceOf(address) view returns (uint)",
@@ -28,12 +29,12 @@ var fau = {};
 export const app = new Frog({
   assetsPath: "/",
   basePath: "/api",
-  //browserLocation: '/html'
-
   // Supply a Hub to enable frame verification.
   // hub: neynar({ apiKey: "NEYNAR_FROG_FM" }),
   //hub: pinata(),
 });
+
+app.use(xmtpSupport);
 
 app.frame("/", (c) => {
   return c.res({
