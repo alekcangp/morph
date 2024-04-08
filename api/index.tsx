@@ -11,9 +11,9 @@ const usdtAbi = [
   "event Transfer(address indexed from, address indexed to, uint amount)",
 ];
 // Uncomment to use Edge Runtime.
-// export const config = {
-//   runtime: 'edge',
-// }
+export const config = {
+  runtime: "edge",
+};
 
 const provider = new ethers.JsonRpcProvider("https://rpc-testnet.morphl2.io");
 const pk = process.env.PK;
@@ -27,7 +27,7 @@ var fau = {};
 
 export const app = new Frog({
   assetsPath: "/",
-  basePath: "/api",
+  basePath: "/",
   //browserLocation: '/html'
 
   // Supply a Hub to enable frame verification.
