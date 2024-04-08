@@ -11,9 +11,9 @@ const usdtAbi = [
   "event Transfer(address indexed from, address indexed to, uint amount)",
 ];
 // Uncomment to use Edge Runtime.
-export const config = {
-  runtime: "edge",
-};
+//export const config = {
+//runtime: "edge",
+//};
 
 const provider = new ethers.JsonRpcProvider("https://rpc-testnet.morphl2.io");
 const pk = process.env.PK;
