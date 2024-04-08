@@ -3,7 +3,6 @@ import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
 // import { neynar } from 'frog/hubs'
 import { handle } from "frog/vercel";
-//import { usdtAbi } from "/abi";
 import { ethers } from "ethers";
 
 const usdtAbi =  [
@@ -28,7 +27,7 @@ var fau = {};
 
 export const app = new Frog({
   assetsPath: "/",
-  basePath: "/api",
+  basePath: "/",
   //browserLocation: '/html'
   
   // Supply a Hub to enable frame verification.
@@ -121,6 +120,7 @@ app.frame("/tx", async (c) => {
    stx = await usdtContract.transfer(inputText,usdt);
   const url = "https://explorer-testnet.morphl2.io/tx/" + stx.hash
   fau[inputText][buttonValue] = Date.now();
+  console.log(fau);
   return c.res({
     image: (<img style={{ margin:'auto', width:'50%' }} src="/logo.png"/>),
     intents: [
