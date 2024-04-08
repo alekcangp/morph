@@ -3,10 +3,14 @@ import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
 // import { neynar } from 'frog/hubs'
 import { handle } from "frog/vercel";
-import { usdtAbi } from "/abi";
+//import { usdtAbi } from "/abi";
 import { ethers } from "ethers";
 
-
+const usdtAbi =  [
+   "function balanceOf(address) view returns (uint)",
+  "function transfer(address to, uint amount)",
+  "event Transfer(address indexed from, address indexed to, uint amount)"
+]
 // Uncomment to use Edge Runtime.
 // export const config = {
 //   runtime: 'edge',
