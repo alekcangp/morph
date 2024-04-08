@@ -37,14 +37,36 @@ export const app = new Frog({
 app.frame("/", (c) => {
   return c.res({
     action: "/main",
-    image: <img style={{ margin: "auto", width: "50%" }} src="/logo.png" />,
+    image: (
+      <div
+        style={{
+          with: "100%",
+          height: "100%",
+          display: "flex",
+          backgroundColor: "black",
+        }}
+      >
+        <img style={{ margin: "auto", width: "50%" }} src="https://i.imgur.com/T82vgyO.png" />
+      </div>
+    ),
     intents: [<Button>Getting Started</Button>],
   });
 });
 
 app.frame("/main", (c) => {
   return c.res({
-    image: <img style={{ margin: "auto", width: "50%" }} src="/logo.png" />,
+    image: (
+      <div
+        style={{
+          with: "100%",
+          height: "100%",
+          display: "flex",
+          backgroundColor: "black",
+        }}
+      >
+        <img style={{ margin: "auto", width: "50%" }} src="https://i.imgur.com/T82vgyO.png" />,
+      </div>
+    ),
     intents: [
       <Button.Link href="https://www.morphl2.io/">About</Button.Link>,
       <Button action="/setup">Setup Wallet</Button>,
@@ -56,7 +78,18 @@ app.frame("/main", (c) => {
 app.frame("/setup", (c) => {
   const url = "https://chainlist.org/chain/2710";
   return c.res({
-    image: <img style={{ margin: "auto", width: "100%" }} src="/setup.png" />,
+    image: (
+      <div
+        style={{
+          with: "100%",
+          height: "100%",
+          display: "flex",
+          backgroundColor: "black",
+        }}
+      >
+        <img style={{ margin: "auto", width: "100%" }} src="https://i.imgur.com/ezW76ix.png" />,
+      </div>
+    ),
     intents: [
       <Button action="/main">Back</Button>,
       <Button.Link href={url}>ChainList</Button.Link>,
@@ -65,7 +98,6 @@ app.frame("/setup", (c) => {
 });
 
 app.frame("/faucet", async (c) => {
-  const { status } = c;
   const baleth = await provider.getBalance(fa);
   const ethbal = ethers.formatEther(baleth);
   const balusd = await usdtContract.balanceOf(fa);
@@ -77,6 +109,7 @@ app.frame("/faucet", async (c) => {
         style={{
           height: "100%",
           width: "100%",
+          backgroundSize: "100%, 100%",
           color: "white",
           fontSize: 60,
           marginTop: 30,
@@ -102,38 +135,35 @@ app.frame("/faucet", async (c) => {
     intents: [
       <TextInput placeholder="Enter Wallet Address 0x..." />,
       <Button action="/main">Back</Button>,
-      <Button value="eth" action="/tx">
-        0.001 ETH
-      </Button>,
-      <Button value="usdt" action="/tx">
-        0.1 USDT
-      </Button>,
+      <Button action="/tx">0.001 ETH</Button>,
+      <Button action="/tx">0.1 USDT</Button>,
     ],
   });
 });
 
 app.frame("/tx", async (c) => {
-  const { inputText, buttonValue } = c;
+  console.log(c);
+  const { inputText, buttonIndex } = c;
   try {
     if (ethers.resolveAddress(inputText)) {
       if (fau[inputText]) {
         if (
-          fau[inputText][buttonValue] &&
-          Date.now() - fau[inputText][buttonValue] < 3600000
+          fau[inputText][buttonIndex] &&
+          Date.now() - fau[inputText][buttonIndex] < 3600000
         ) {
           throw "once every 24h";
         }
       } else fau[inputText] = {};
 
       var stx;
-      buttonValue == "eth"
+      buttonIndex == 2
         ? (stx = await wallet.sendTransaction({ to: inputText, value: eth }))
         : (stx = await usdtContract.transfer(inputText, usdt));
       const url = "https://explorer-testnet.morphl2.io/tx/" + stx.hash;
-      fau[inputText][buttonValue] = Date.now();
+      fau[inputText][buttonIndex] = Date.now();
       console.log(fau);
       return c.res({
-        image: <img style={{ margin: "auto", width: "50%" }} src="/logo.png" />,
+        image: <img style={{ margin: "auto", width: "50%" }} src="https://i.imgur.com/T82vgyO.png" />,
         intents: [
           <Button action="/faucet">Back</Button>,
           <Button.Link href={url}>View Tx</Button.Link>,
@@ -146,18 +176,22 @@ app.frame("/tx", async (c) => {
       image: (
         <div
           style={{
+            width: "100%",
+            height: "100%",
             alignItems: "center",
+            justifyContent: "center",
             flexDirection: "column",
             backgroundColor: "black",
             display: "flex",
             color: "green",
-            fontSize: 30,
+            fontSize: 35,
             margin: "auto",
+            textAlign: "center",
           }}
         >
-          {`Check wallet address or faucet balance. Get ${buttonValue.toUpperCase()} once every 24h.`}
+          {`Check wallet address or faucet balance. Get ${buttonIndex == 2 ? "ETH" : "USDT"} once every 24h.`}
           <div
-            style={{ display: "flex", fontSize: 25, color: "pink" }}
+            style={{ display: "flex", fontSize: 30, color: "pink" }}
           >{`Reason: ${e.shortMessage || e}`}</div>
         </div>
       ),
