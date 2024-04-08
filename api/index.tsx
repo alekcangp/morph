@@ -3,7 +3,7 @@ import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
 // import { neynar } from 'frog/hubs'
 import { handle } from "frog/vercel";
-//import { usdtAbi } from "./abi";
+import { usdtAbi } from "./abi";
 import { ethers } from "ethers";
 
 
@@ -16,13 +16,14 @@ const provider = new ethers.JsonRpcProvider("https://rpc-testnet.morphl2.io");
 //const signer = provider.getSigner();
 const pk = process.env.PK;
 const wallet = new ethers.Wallet(pk,provider)
-//const usdtAddress = "0xB4A71512cf4F3A8f675D2aeC76198D6419D219C7" //usdt on morph testnet
-//const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, provider);
-const fa = wallet.address//"0x8cFc0e8C1f8DFb3335e00de92D9Cb6556f841C04";
+const usdtAddress = "0xB4A71512cf4F3A8f675D2aeC76198D6419D219C7" //usdt on morph testnet
+const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, wallet);
+const fa = wallet.address// faucet address "0x8cFc0e8C1f8DFb3335e00de92D9Cb6556f841C04";
 //const usdtWithSigner = contract.connect(signer);
-//const usdt = ethers.utils.parseUnits("0.01", 18);
-var feth = {};
+const usdt = ethers.parseUnits("0.1", 18);
+const  eth = ethers.parseEther("0.001");
 
+var fau = {}; 
 
 export const app = new Frog({
   assetsPath: "/",
@@ -72,6 +73,8 @@ app.frame("/faucet", async (c) => {
   const {status} = c;
   const baleth = await provider.getBalance(fa);
   const ethbal = ethers.formatEther(baleth);
+  const balusd = await usdtContract.balanceOf(fa);
+  const usdbal = ethers.formatUnits(balusd, 18)
   //console.log(ethbal);
  // const balusdt = await usdtContract.balanceOf(fa);
   //const usdtbal = ethers.utils.formatUnits(balusdt, 18)
@@ -95,84 +98,82 @@ app.frame("/faucet", async (c) => {
       }}>
         FAUCET BALANCE
         <div style={{ display: 'flex',color: 'lime'}}>ETH: {Math.round(ethbal * 1e4) / 1e4}</div>
-       <div style={{ display: 'flex',color: 'violet'}}>USDT:</div>
+       <div style={{ display: 'flex',color: 'violet'}}>USDT: {Math.round(usdbal * 1e2) / 1e2}</div>
       </div>
     ),
     intents: [
       <TextInput placeholder="Enter Wallet Address 0x..." />,
       <Button action="/main">Back</Button>,
-      <Button action="/eth" >0.001 ETH</Button>,
-      <Button action="/usdt" >0.01 USDT</Button>,
+      <Button value="eth" action="/tx" >0.001 ETH</Button>,
+      <Button value="usdt" action="/tx" >0.1 USDT</Button>,
     ],
   });
 });
 
-app.frame("/eth", async (c) => {
+app.frame("/tx", async (c) => {
+  const { inputText, buttonValue } = c;
   try {
-  const { inputText } = c;
-  //const v = ethers.isAddress(inputText);
   if (ethers.resolveAddress(inputText)) {
    // const tx = signer.sendTransaction({
     //  to: inputText,
     //  value: ethers.utils.parseEther("0.001")
  // });
- 
-  if (feth[inputText] && (Date.now() - feth[inputText]) < 3600000 ) throw new Error("Wait...");
+if (fau[inputText]) {
+  if (fau[inputText][buttonValue] && (Date.now() - fau[inputText][buttonValue]) < 3600000 ) { throw "once every 24h"} 
+} else fau[inputText] = {};
+
   
-  const tx = {
-    to: inputText,
-    value: ethers.parseEther("0.0001")
-  }
-  
-  //const stx = await wallet.sendTransaction(stx)
-  const url = "https://explorer-testnet.morphl2.io/tx/" //+ stx.hash
-  feth[inputText]=Date.now();
+  //const tx = {
+    //to: inputText,
+   // value: eth
+  //}
+  var stx;
+  (buttonValue == 'eth') ?
+   stx = await wallet.sendTransaction({to: inputText,value: eth }) :
+   stx = await usdtContract.transfer(inputText,usdt);
+  //console.log(stx)
+  const url = "https://explorer-testnet.morphl2.io/tx/" + stx.hash
+  fau[inputText][buttonValue] = Date.now();
   return c.res({
     image: (<img style={{ margin:'auto', width:'50%' }} src="/logo.png"/>),
     intents: [
       <Button action="/faucet">Back</Button>,
       <Button.Link href={url}>View Tx</Button.Link>,
-      //status === "response" && <Button.Reset>Reset</Button.Reset>,
     ],
   });
   }
   } catch(e) {
-   
+   console.log(e.shortMessage || e)
     return c.res({
       image: (
-        <div style={{backgroundColor:'black', display: 'flex',color: 'green',fontSize:30, margin:'auto'}}>
-         Check wallet address or faucet balance. Get ETH every 24h.
+        <div style={{ alignItems: 'center',
+        flexDirection: 'column',
+        backgroundColor:'black',  display: 'flex',color: 'green',fontSize:30, margin:'auto'}}>
+         {`Check wallet address or faucet balance. Get ${buttonValue.toUpperCase()} once every 24h.`}
+        <div style={{display:'flex',fontSize:25,color: 'pink',}}>{`Reason: ${e.shortMessage || e}`}</div>
         </div>
+        
         ),
       intents: [
         <Button action="/faucet">Back</Button>,
+        <Button.Reset>Reset</Button.Reset>,
       ],
     });
 
   }
 });
 
-/*
-app.frame("/usdt", (c) => {
-  const { inputText } = c;
-  if (inputText ) {
-    const tx = usdtWithSigner.transfer(inputText, usdt);
-  }
-  return c.res({
-    image: (<img style={{ margin:'auto', width:'50%' }} src="/logo.png"/>),
-    intents: [
-      <TextInput placeholder="Enter Wallet Address" />,
-      <Button action="/faucet">Back</Button>,
-      <Button.Transaction target="/send-ether">Send Ether</Button.Transaction>,
-      <Button>Request 0.001 ETH</Button>,
-      
-    ],
-  });
+
+app.frame("/html", (c) => {
+ 
+  return c.res(
+    `<html><body>cvcxvcv</body></html>`
+  );
 });
 
 
 
-*/
+
 // @ts-ignore
 const isEdgeFunction = typeof EdgeFunction !== "undefined";
 const isProduction = isEdgeFunction || import.meta.env?.MODE !== "development";
