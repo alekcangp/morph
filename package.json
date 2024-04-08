@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "frog vercel-build",
-    "dev": "frog dev",
+    "dev": "frog dev --port 3000",
     "deploy": "vercel"
   },
   "dependencies": {

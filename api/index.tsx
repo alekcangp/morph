@@ -1,7 +1,7 @@
 import { Button, Frog, TextInput, parseEther } from "frog";
 import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
-//import { neynar } from "frog/hubs";
+//import { pinata } from "frog/hubs";
 import { handle } from "frog/vercel";
 import { ethers } from "ethers";
 
@@ -27,11 +27,12 @@ var fau = {};
 
 export const app = new Frog({
   assetsPath: "/",
-  basePath: "/api",
+  basePath: "/",
   //browserLocation: '/html'
 
   // Supply a Hub to enable frame verification.
   // hub: neynar({ apiKey: "NEYNAR_FROG_FM" }),
+  //hub: pinata(),
 });
 
 app.frame("/", (c) => {
@@ -40,13 +41,16 @@ app.frame("/", (c) => {
     image: (
       <div
         style={{
-          with: "100%",
+          width: "100%",
           height: "100%",
           display: "flex",
           backgroundColor: "black",
         }}
       >
-        <img style={{ margin: "auto", width: "50%" }} src="https://i.imgur.com/T82vgyO.png" />
+        <img
+          style={{ margin: "auto", width: "50%" }}
+          src="https://i.postimg.cc/rsg3yJTc/logo.gif"
+        />
       </div>
     ),
     intents: [<Button>Getting Started</Button>],
@@ -64,7 +68,10 @@ app.frame("/main", (c) => {
           backgroundColor: "black",
         }}
       >
-        <img style={{ margin: "auto", width: "50%" }} src="https://i.imgur.com/T82vgyO.png" />,
+        <img
+          style={{ margin: "auto", width: "50%" }}
+          src="https://i.postimg.cc/rsg3yJTc/logo.gif"
+        />
       </div>
     ),
     intents: [
@@ -87,7 +94,10 @@ app.frame("/setup", (c) => {
           backgroundColor: "black",
         }}
       >
-        <img style={{ margin: "auto", width: "100%" }} src="https://i.imgur.com/ezW76ix.png" />,
+        <img
+          style={{ margin: "auto", width: "100%" }}
+          src="https://i.postimg.cc/RVHZF68f/setup.gif"
+        />
       </div>
     ),
     intents: [
@@ -142,7 +152,6 @@ app.frame("/faucet", async (c) => {
 });
 
 app.frame("/tx", async (c) => {
-  console.log(c);
   const { inputText, buttonIndex } = c;
   try {
     if (ethers.resolveAddress(inputText)) {
@@ -161,9 +170,23 @@ app.frame("/tx", async (c) => {
         : (stx = await usdtContract.transfer(inputText, usdt));
       const url = "https://explorer-testnet.morphl2.io/tx/" + stx.hash;
       fau[inputText][buttonIndex] = Date.now();
-      console.log(fau);
+      //console.log(fau);
       return c.res({
-        image: <img style={{ margin: "auto", width: "50%" }} src="https://i.imgur.com/T82vgyO.png" />,
+        image: (
+          <div
+            style={{
+              with: "100%",
+              height: "100%",
+              display: "flex",
+              backgroundColor: "black",
+            }}
+          >
+            <img
+              style={{ margin: "auto", width: "50%" }}
+              src="https://i.postimg.cc/5t6xhXw6/success.gif"
+            />
+          </div>
+        ),
         intents: [
           <Button action="/faucet">Back</Button>,
           <Button.Link href={url}>View Tx</Button.Link>,
@@ -197,7 +220,7 @@ app.frame("/tx", async (c) => {
       ),
       intents: [
         <Button action="/faucet">Back</Button>,
-        <Button.Reset>Reset</Button.Reset>,
+        <Button action="/">Restart</Button>,
       ],
     });
   }
@@ -206,6 +229,7 @@ app.frame("/tx", async (c) => {
 // @ts-ignore
 const isEdgeFunction = typeof EdgeFunction !== "undefined";
 const isProduction = isEdgeFunction || import.meta.env?.MODE !== "development";
+
 devtools(app, isProduction ? { assetsPath: "/.frog" } : { serveStatic });
 
 export const GET = handle(app);
