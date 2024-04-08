@@ -13,22 +13,19 @@ import { ethers } from "ethers";
 // }
 
 const provider = new ethers.JsonRpcProvider("https://rpc-testnet.morphl2.io");
-//const signer = provider.getSigner();
 const pk = process.env.PK;
 const wallet = new ethers.Wallet(pk,provider)
 const usdtAddress = "0xB4A71512cf4F3A8f675D2aeC76198D6419D219C7" //usdt on morph testnet
 const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, wallet);
 const fa = wallet.address// faucet address "0x8cFc0e8C1f8DFb3335e00de92D9Cb6556f841C04";
-//const usdtWithSigner = contract.connect(signer);
 const usdt = ethers.parseUnits("0.1", 18);
 const  eth = ethers.parseEther("0.001");
-
 var fau = {}; 
 
 export const app = new Frog({
   assetsPath: "/",
   basePath: "/api",
-  browserLocation: '/html'
+  //browserLocation: '/html'
   
   // Supply a Hub to enable frame verification.
   // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
@@ -56,7 +53,6 @@ app.frame("/main", (c) => {
 });
 
 app.frame("/setup", (c) => {
-  //console.log(c)
 const url = "https://chainlist.org/chain/2710"
     return c.res({
     image: (<img style={{ margin:'auto', width:'100%' }} src="/setup.png"/>),
@@ -75,9 +71,6 @@ app.frame("/faucet", async (c) => {
   const ethbal = ethers.formatEther(baleth);
   const balusd = await usdtContract.balanceOf(fa);
   const usdbal = ethers.formatUnits(balusd, 18)
-  //console.log(ethbal);
- // const balusdt = await usdtContract.balanceOf(fa);
-  //const usdtbal = ethers.utils.formatUnits(balusdt, 18)
 
   return c.res({
     image: (
@@ -114,24 +107,14 @@ app.frame("/tx", async (c) => {
   const { inputText, buttonValue } = c;
   try {
   if (ethers.resolveAddress(inputText)) {
-   // const tx = signer.sendTransaction({
-    //  to: inputText,
-    //  value: ethers.utils.parseEther("0.001")
- // });
-if (fau[inputText]) {
-  if (fau[inputText][buttonValue] && (Date.now() - fau[inputText][buttonValue]) < 3600000 ) { throw "once every 24h"} 
-} else fau[inputText] = {};
+    if (fau[inputText]) {
+     if (fau[inputText][buttonValue] && (Date.now() - fau[inputText][buttonValue]) < 3600000 ) { throw "once every 24h"} 
+  } else fau[inputText] = {};
 
-  
-  //const tx = {
-    //to: inputText,
-   // value: eth
-  //}
   var stx;
   (buttonValue == 'eth') ?
    stx = await wallet.sendTransaction({to: inputText,value: eth }) :
    stx = await usdtContract.transfer(inputText,usdt);
-  //console.log(stx)
   const url = "https://explorer-testnet.morphl2.io/tx/" + stx.hash
   fau[inputText][buttonValue] = Date.now();
   return c.res({
@@ -152,7 +135,6 @@ if (fau[inputText]) {
          {`Check wallet address or faucet balance. Get ${buttonValue.toUpperCase()} once every 24h.`}
         <div style={{display:'flex',fontSize:25,color: 'pink',}}>{`Reason: ${e.shortMessage || e}`}</div>
         </div>
-        
         ),
       intents: [
         <Button action="/faucet">Back</Button>,
@@ -162,15 +144,6 @@ if (fau[inputText]) {
 
   }
 });
-
-
-app.frame("/html", (c) => {
- 
-  return c.res(
-    `<html><body>cvcxvcv</body></html>`
-  );
-});
-
 
 
 
