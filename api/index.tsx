@@ -167,12 +167,13 @@ app.frame("/faucet", async (c) => {
 
 app.frame("/tx", async (c) => {
   const { inputText, buttonIndex } = c;
+  const = Date.now();
   try {
     if (ethers.resolveAddress(inputText)) {
       if (fau[inputText]) {
         if (
           fau[inputText][buttonIndex] &&
-          Date.now() - fau[inputText][buttonIndex] < 3600000
+         (now - fau[inputText][buttonIndex]) < 3600000
         ) {
           throw "once every 24h";
         }
@@ -183,8 +184,8 @@ app.frame("/tx", async (c) => {
         ? (stx = await wallet.sendTransaction({ to: inputText, value: eth }))
         : (stx = await usdtContract.transfer(inputText, usdt));
       const url = "https://explorer-testnet.morphl2.io/tx/" + stx.hash;
-      fau[inputText][buttonIndex] = Date.now();
-      //console.log(fau);
+      fau[inputText][buttonIndex] = now;
+      console.log(fau);
       return c.res({
         image: (
           <div
