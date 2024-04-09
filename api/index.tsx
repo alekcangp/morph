@@ -185,7 +185,7 @@ app.frame("/tx", async (c) => {
         : (stx = await usdtContract.transfer(inputText, usdt));
       const url = "https://explorer-testnet.morphl2.io/tx/" + stx.hash;
       fau[inputText][buttonIndex] = now;
-      console.log(fau);
+      //console.log(fau);
       return c.res({
         image: (
           <div
