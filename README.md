@@ -4,7 +4,7 @@
 **Using the frame, users can connect their wallet to Morph and request funds (ETH and USDT), simply enter wallet address, and hit “0.001 ETH” or “0.1 USDT”. Get funds every 24 hours.**
 <center>
   
-<a href="https://www.youtube.com/watch?v=VAAaoD4jSjQ" target="_blank">VIDEO</a>
+[VIDEO](https://www.youtube.com/watch?v=VAAaoD4jSjQ)
   
 ![1](https://i.postimg.cc/RVKpZ666/1.gif)
 
