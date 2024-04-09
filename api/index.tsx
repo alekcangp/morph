@@ -167,7 +167,7 @@ app.frame("/faucet", async (c) => {
 
 app.frame("/tx", async (c) => {
   const { inputText, buttonIndex } = c;
-  const = Date.now();
+  const now = Date.now();
   try {
     if (ethers.resolveAddress(inputText)) {
       if (fau[inputText]) {
