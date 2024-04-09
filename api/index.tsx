@@ -22,7 +22,7 @@ const usdtAddress = "0xB4A71512cf4F3A8f675D2aeC76198D6419D219C7"; //usdt on morp
 const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, wallet);
 const fa = wallet.address; // faucet address "0x8cFc0e8C1f8DFb3335e00de92D9Cb6556f841C04";
 const usdt = ethers.parseUnits("0.1", 18);
-const eth = ethers.parseEther("0.001");
+const eth = ethers.parseEther("0.01");
 var fau = {};
 
 export const app = new Frog({
@@ -159,7 +159,7 @@ app.frame("/faucet", async (c) => {
     intents: [
       <TextInput placeholder="Enter Wallet Address 0x..." />,
       <Button action="/main">Back</Button>,
-      <Button action="/tx">0.001 ETH</Button>,
+      <Button action="/tx">0.01 ETH</Button>,
       <Button action="/tx">0.1 USDT</Button>,
     ],
   });
