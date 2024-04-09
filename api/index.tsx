@@ -67,7 +67,9 @@ app.frame("/", (c) => {
         />
       </div>
     ),
-    intents: [<Button>Getting Started</Button>],
+    intents: [<Button action="/main">Getting Started</Button>,
+              <Button.Link href="https://www.morphl2.io/">About</Button.Link>,
+             ],
   });
 });
 
@@ -89,7 +91,7 @@ app.frame("/main", (c) => {
       </div>
     ),
     intents: [
-      <Button.Link href="https://www.morphl2.io/">About</Button.Link>,
+      <Button.Link href="https://bridge-testnet.morphl2.io/">Bridge</Button.Link>,
       <Button action="/setup">Setup Wallet</Button>,
       <Button action="/faucet">Faucet</Button>,
     ],
