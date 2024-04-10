@@ -30,7 +30,7 @@ npm run dev
 
 Past the frame URL **https://morphl2-frame.vercel.app/api** in compatible Farcaster client.
 
-[Live URL](https://far.quest/alekcangp/0xce599ae08b2b1c1b163affe3d0d218d7f417ff)
+[Live URL](https://far.quest/alekcangp/0x4755d287125ba1ca2b2c1cb5166cead06984e60e)
 
 [Debugger frame.js](https://debugger.framesjs.org/?url=https://morphl2-frame.vercel.app/api)
 
