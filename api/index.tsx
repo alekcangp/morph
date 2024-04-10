@@ -51,6 +51,9 @@ app.use("/*", async (c: any, next: any) => {
 
 app.frame("/", (c) => {
   return c.res({
+     headers: {
+      'cache-control': 'max-age=0',
+    },
     action: "/main",
     image: (
       <div
@@ -70,6 +73,7 @@ app.frame("/", (c) => {
     intents: [<Button action="/main">Getting Started</Button>,
               <Button.Link href="https://www.morphl2.io/">About</Button.Link>,
              ],
+    title: 'Morph Frame',
   });
 });
 
