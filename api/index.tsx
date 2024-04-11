@@ -210,13 +210,13 @@ app.frame("/contribute", async (c) => {
       >
         CONTRIBUTORS
         <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
-          {arr[0].addr} &#10140; {Math.round(arr[0].amt * 1e3) / 1e3} {arr[0].f}
+          {arr[0].addr} ✅ {Math.round(arr[0].amt * 1e3) / 1e3} {arr[0].f}
         </div>
         <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
-          {arr[1].addr} &#10140; {Math.round(arr[1].amt * 1e3) / 1e3} {arr[1].f}
+          {arr[1].addr} ✅ {Math.round(arr[1].amt * 1e3) / 1e3} {arr[1].f}
         </div>
         <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
-          {arr[2].addr} &#10140; {Math.round(arr[2].amt * 1e3) / 1e3} {arr[2].f}
+          {arr[2].addr} ✅ {Math.round(arr[2].amt * 1e3) / 1e3} {arr[2].f}
         </div>
       </div>
     ),
