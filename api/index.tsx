@@ -218,6 +218,12 @@ app.frame("/contribute", async (c) => {
         <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
           {arr[2].addr} ✅ {Math.round(arr[2].amt * 1e3) / 1e3} {arr[2].f}
         </div>
+        <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
+          {arr[3].addr} ✅ {Math.round(arr[3].amt * 1e3) / 1e3} {arr[3].f}
+        </div>
+        <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
+          {arr[4].addr} ✅ {Math.round(arr[4].amt * 1e3) / 1e3} {arr[4].f}
+        </div>
       </div>
     ),
     intents: [
