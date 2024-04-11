@@ -19,16 +19,17 @@ const provider = new ethers.JsonRpcProvider("https://rpc-testnet.morphl2.io");
 const pk = process.env.PK;
 const wallet = new ethers.Wallet(pk, provider);
 const usdtAddress = "0xB4A71512cf4F3A8f675D2aeC76198D6419D219C7"; //usdt on morph testnet
+const ethl2 = "0x4200000000000000000000000000000000000010";
 const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, wallet);
 const fa = wallet.address; // faucet address "0x8cFc0e8C1f8DFb3335e00de92D9Cb6556f841C04";
-const usdt = ethers.parseUnits("0.1", 18);
+const usdt = ethers.parseUnits("1", 18);
 const eth = ethers.parseEther("0.01");
 var fau = {};
 
 export const app = new Frog({
   assetsPath: "/public",
   basePath: "/api",
-  browserLocation: '/:basePath/dev',
+  browserLocation: "/:basePath/dev",
   // Supply a Hub to enable frame verification.
   // hub: neynar({ apiKey: "NEYNAR_FROG_FM" }),
   //hub: pinata(),
@@ -52,8 +53,8 @@ app.use("/*", async (c: any, next: any) => {
 
 app.frame("/", (c) => {
   return c.res({
-     headers: {
-      'cache-control': 'max-age=0',
+    headers: {
+      "cache-control": "max-age=0",
     },
     action: "/main",
     image: (
@@ -71,10 +72,11 @@ app.frame("/", (c) => {
         />
       </div>
     ),
-    intents: [<Button action="/main">Getting Started</Button>,
-              <Button.Link href="https://www.morphl2.io/">About</Button.Link>,
-             ],
-    title: 'Morph Frame',
+    intents: [
+      <Button action="/main">Getting Started</Button>,
+      <Button.Link href="https://www.morphl2.io/">About</Button.Link>,
+    ],
+    title: "Morph Frame",
   });
 });
 
@@ -96,9 +98,12 @@ app.frame("/main", (c) => {
       </div>
     ),
     intents: [
-      <Button.Link href="https://bridge-testnet.morphl2.io/">Bridge</Button.Link>,
-      <Button action="/setup">Setup Wallet</Button>,
-      <Button action="/faucet">Faucet</Button>,
+      <Button.Link href="https://bridge-testnet.morphl2.io/">
+        Bridge
+      </Button.Link>,
+      <Button action="/setup">Setup ⚙️</Button>,
+      <Button action="/contribute">Contribute ✔️</Button>,
+      <Button action="/faucet">Faucet 🪙</Button>,
     ],
   });
 });
@@ -109,24 +114,122 @@ app.frame("/setup", (c) => {
     image: (
       <div
         style={{
-          with: "100%",
+          width: "100%",
           height: "100%",
           display: "flex",
           backgroundColor: "black",
+          textAlign: "center",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          color: "white",
+          fontSize: 60,
         }}
       >
+        Setup Wallet
         <img
-          style={{ margin: "auto", width: "100%" }}
+          style={{ width: "100%" }}
           src="https://i.postimg.cc/RVHZF68f/setup.gif"
         />
       </div>
     ),
     intents: [
-      <Button action="/main">Back</Button>,
+      <Button action="/main">&laquo; Back</Button>,
       <Button.Link href={url}>ChainList</Button.Link>,
     ],
   });
 });
+
+app.frame("/contribute", async (c) => {
+  const url = "https://explorer-testnet.morphl2.io/address/" + fa;
+  const rtok = await fetch(
+    "https://explorer-api-testnet.morphl2.io/api/v2/addresses/" +
+      fa +
+      "/token-transfers?token=" +
+      usdtAddress,
+  );
+  const tok = await rtok.json();
+  const rcoi = await fetch(
+    "https://explorer-api-testnet.morphl2.io/api/v2/addresses/" +
+      fa +
+      "/transactions",
+  );
+
+  const coi = await rcoi.json();
+  //console.log(int);
+  const co = tok.items.concat(coi.items);
+  const txs = co.sort((a, b) => {
+    return new Date(b.timestamp).valueOf() - new Date(a.timestamp).valueOf();
+  });
+  //console.log(txs[1]);
+  const arr = [];
+
+  for (let i = 0; i < txs.length; i++) {
+    if (
+      txs[i].to.hash == fa &&
+      txs[i].from.hash != fa &&
+      txs[i].from.hash != ethl2
+    ) {
+      if (txs[i]["method"] === null) {
+        arr.push({
+          addr: txs[i]["from"]["hash"],
+          amt: ethers.formatEther(txs[i]["value"]),
+          f: "ETH",
+        });
+      }
+      if (txs[i]["method"] == "transfer") {
+        arr.push({
+          addr: txs[i]["from"]["hash"],
+          amt: ethers.formatUnits(txs[i]["total"]["value"], 18),
+          f: "USDT",
+        });
+      }
+    }
+  }
+ // console.log(arr);
+
+  return c.res({
+    image: (
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          backgroundSize: "100%, 100%",
+          color: "white",
+          fontSize: 60,
+          marginTop: 30,
+          lineHeight: 1.8,
+          display: "flex",
+          textAlign: "center",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          flexWrap: "nowrap",
+          backgroundColor: "black",
+        }}
+      >
+        CONTRIBUTORS
+        <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
+          {arr[0].addr} &#10140; {Math.round(arr[0].amt * 1e3) / 1e3} {arr[0].f}
+        </div>
+        <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
+          {arr[1].addr} &#10140; {Math.round(arr[1].amt * 1e3) / 1e3} {arr[1].f}
+        </div>
+        <div style={{ display: "flex", color: "lime", fontSize: 30 }}>
+          {arr[2].addr} &#10140; {Math.round(arr[2].amt * 1e3) / 1e3} {arr[2].f}
+        </div>
+      </div>
+    ),
+    intents: [
+      <Button action="/main">&laquo; Back</Button>,
+      <Button.Link href={url}>Faucet Address</Button.Link>,
+    ],
+  });
+});
+
+//<div style={{ display: "flex", color: "lime", fontSize: 30 }}>
+// {arr[0].addr} : {Math.round(arr[0].amt * 1e2) / 1e2} {arr[0].f}
+//</div>
 
 app.frame("/faucet", async (c) => {
   const baleth = await provider.getBalance(fa);
@@ -165,9 +268,9 @@ app.frame("/faucet", async (c) => {
     ),
     intents: [
       <TextInput placeholder="Enter Wallet Address 0x..." />,
-      <Button action="/main">Back</Button>,
+      <Button action="/main">&laquo; Back</Button>,
       <Button action="/tx">0.01 ETH</Button>,
-      <Button action="/tx">0.1 USDT</Button>,
+      <Button action="/tx">1 USDT</Button>,
     ],
   });
 });
@@ -180,7 +283,7 @@ app.frame("/tx", async (c) => {
       if (fau[inputText]) {
         if (
           fau[inputText][buttonIndex] &&
-         (now - fau[inputText][buttonIndex]) < 3600000
+          now - fau[inputText][buttonIndex] < 3600000
         ) {
           throw "once every 24h";
         }
@@ -210,7 +313,7 @@ app.frame("/tx", async (c) => {
           </div>
         ),
         intents: [
-          <Button action="/faucet">Back</Button>,
+          <Button action="/faucet">&laquo; Back</Button>,
           <Button.Link href={url}>View Tx</Button.Link>,
         ],
       });
@@ -241,7 +344,7 @@ app.frame("/tx", async (c) => {
         </div>
       ),
       intents: [
-        <Button action="/faucet">Back</Button>,
+        <Button action="/faucet">&laquo; Back</Button>,
         <Button action="/">Restart</Button>,
       ],
     });
