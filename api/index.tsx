@@ -101,9 +101,9 @@ app.frame("/main", (c) => {
       <Button.Link href="https://bridge-testnet.morphl2.io/">
         Bridge
       </Button.Link>,
-      <Button action="/setup">Setup ⚙️</Button>,
-      <Button action="/contribute">Contribute ✔️</Button>,
-      <Button action="/faucet">Faucet 🪙</Button>,
+      <Button action="/setup">Setup⚙️</Button>,
+      <Button action="/contribute">Contribute✔️</Button>,
+      <Button action="/faucet">Faucet🪙</Button>,
     ],
   });
 });
@@ -186,7 +186,7 @@ app.frame("/contribute", async (c) => {
       }
     }
   }
- // console.log(arr);
+  // console.log(arr);
 
   return c.res({
     image: (
