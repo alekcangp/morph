@@ -1,7 +1,7 @@
 
 ## This is Farcaster Frame for easy way to take first step on Morph L2 testnet.
 
-**Using the frame, users can connect their wallet to Morph and request funds (ETH and USDT), simply enter wallet address, and hit “0.01 ETH” or “0.1 USDT”. Get funds every 24 hours.**
+**Using the frame, users can connect their wallet to Morph and request funds (ETH and USDT), simply enter wallet address, and hit “0.01 ETH” or “1 USDT”. Get funds every 24 hours.**
 <center>
   
 [VIDEO](https://www.youtube.com/watch?v=VAAaoD4jSjQ)
