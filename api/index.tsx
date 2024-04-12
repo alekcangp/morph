@@ -126,7 +126,7 @@ app.frame("/setup", (c) => {
           fontSize: 60,
         }}
       >
-        Setup Wallet
+        Network Configuration
         <img
           style={{ width: "100%" }}
           src="https://i.postimg.cc/RVHZF68f/setup.gif"
