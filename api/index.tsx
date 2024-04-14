@@ -102,7 +102,6 @@ app.frame("/main", (c) => {
         Bridge
       </Button.Link>,
       <Button action="/setup">Setup⚙️</Button>,
-      <Button action="/contribute">Contribute✔️</Button>,
       <Button action="/faucet">Faucet🪙</Button>,
     ],
   });
@@ -227,7 +226,7 @@ app.frame("/contribute", async (c) => {
       </div>
     ),
     intents: [
-      <Button action="/main">&laquo; Back</Button>,
+      <Button action="/faucet">&laquo; Back</Button>,
       <Button.Link href={url}>Faucet Address</Button.Link>,
     ],
   });
@@ -277,6 +276,7 @@ app.frame("/faucet", async (c) => {
       <Button action="/main">&laquo; Back</Button>,
       <Button action="/tx">0.01 ETH</Button>,
       <Button action="/tx">1 USDT</Button>,
+       <Button action="/contribute">Contribute✔️</Button>,
     ],
   });
 });
