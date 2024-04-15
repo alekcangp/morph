@@ -272,7 +272,7 @@ app.frame("/faucet", async (c) => {
       </div>
     ),
     intents: [
-      <TextInput placeholder="Enter Wallet Address 0x..." />,
+      <TextInput placeholder="Enter address or Farcaster name" />,
       <Button action="/main">&laquo; Back</Button>,
       <Button action="/tx">0.01 ETH</Button>,
       <Button action="/tx">1 USDT</Button>,
@@ -284,23 +284,27 @@ app.frame("/faucet", async (c) => {
 app.frame("/tx", async (c) => {
   const { inputText, buttonIndex } = c;
   const now = Date.now();
+  var addr = inputText.match(/[^@\s]+/g)[0];
   try {
-    if (ethers.resolveAddress(inputText)) {
-      if (fau[inputText]) {
-        if (
-          fau[inputText][buttonIndex] &&
-          now - fau[inputText][buttonIndex] < 3600000
-        ) {
+    if (addr.substring(0, 2) != "0x") {
+      const res = await fetch("https://nemes.farcaster.xyz:2281/v1/userNameProofByName?name=" + addr);
+      let data = await res.json();
+      addr = data.owner;
+    }
+    //console.log(addr);
+    if (ethers.resolveAddress(addr)) {
+      if (fau[addr]) {
+        if (fau[addr][buttonIndex] && now - fau[addr][buttonIndex] < 3600000) {
           throw "once every 24h";
         }
-      } else fau[inputText] = {};
+      } else fau[addr] = {};
 
       var stx;
-      buttonIndex == 2
-        ? (stx = await wallet.sendTransaction({ to: inputText, value: eth }))
-        : (stx = await usdtContract.transfer(inputText, usdt));
+       buttonIndex == 2
+         ? (stx = await wallet.sendTransaction({ to: addr, value: eth }))
+         : (stx = await usdtContract.transfer(addr, usdt));
       const url = "https://explorer-testnet.morphl2.io/tx/" + stx.hash;
-      fau[inputText][buttonIndex] = now;
+      fau[addr][buttonIndex] = now;
       //console.log(fau);
       return c.res({
         image: (
@@ -325,7 +329,7 @@ app.frame("/tx", async (c) => {
       });
     }
   } catch (e) {
-    console.log(e.shortMessage || e);
+    //console.log(e.shortMessage || e);
     return c.res({
       image: (
         <div
