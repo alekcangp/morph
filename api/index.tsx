@@ -216,23 +216,23 @@ app.frame("/contribute", async (c) => {
           }}
         >
           <p style={{ color: `${arr[0].c}` }}>
-            {arr[0].t} 🕓 {arr[0].addr} ✅ {Math.round(arr[0].amt * 1e3) / 1e3}
+            {arr[0].t} 🕓 {arr[0].addr} ✅ {Math.round(arr[0].amt * 1e3) / 1e3} 
             {arr[0].f}
           </p>
           <p style={{ color: `${arr[1].c}` }}>
-            {arr[1].t} 🕓 {arr[1].addr} ✅ {Math.round(arr[1].amt * 1e3) / 1e3}
+            {arr[1].t} 🕓 {arr[1].addr} ✅ {Math.round(arr[1].amt * 1e3) / 1e3} 
             {arr[1].f}
           </p>
           <p style={{ color: `${arr[2].c}` }}>
-            {arr[2].t} 🕓 {arr[2].addr} ✅ {Math.round(arr[2].amt * 1e3) / 1e3}
+            {arr[2].t} 🕓 {arr[2].addr} ✅ {Math.round(arr[2].amt * 1e3) / 1e3} 
             {arr[2].f}
           </p>
           <p style={{ color: `${arr[3].c}` }}>
-            {arr[3].t} 🕓 {arr[3].addr} ✅ {Math.round(arr[3].amt * 1e3) / 1e3}
+            {arr[3].t} 🕓 {arr[3].addr} ✅ {Math.round(arr[3].amt * 1e3) / 1e3} 
             {arr[3].f}
           </p>
           <p style={{ color: `${arr[4].c}` }}>
-            {arr[4].t} 🕓 {arr[4].addr} ✅ {Math.round(arr[4].amt * 1e3) / 1e3}
+            {arr[4].t} 🕓 {arr[4].addr} ✅ {Math.round(arr[4].amt * 1e3) / 1e3} 
             {arr[4].f}
           </p>
         </div>
