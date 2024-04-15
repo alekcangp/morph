@@ -142,7 +142,7 @@ app.frame("/setup", (c) => {
 // fetch farcaster username by address
 async function alia(addr, ad) {
   try {
-  const val = await fetch("https://searchcaster.xyz/api/profiles?address=" + addr );
+  const val = await fetch("https://searchcaster.xyz/api/profiles?connected_address=" + addr );
   let ob = await val.json();
   return ob.length > 0 ? ob[0].body.displayName : ad;
   } catch {return ad}
