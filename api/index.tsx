@@ -213,16 +213,16 @@ app.frame("/contribute", async (c) => {
         <div style={{ display: "flex", color: `${arr[0].c}`, fontSize: 30 }}>
           {arr[0].addr} ✅ {Math.round(arr[0].amt * 1e3) / 1e3} {arr[0].f}
         </div>
-        <div style={{ display: "flex", color: `${arr[0].c}`, fontSize: 30 }}>
+        <div style={{ display: "flex", color: `${arr[1].c}`, fontSize: 30 }}>
           {arr[1].addr} ✅ {Math.round(arr[1].amt * 1e3) / 1e3} {arr[1].f}
         </div>
-        <div style={{ display: "flex", color: `${arr[0].c}`, fontSize: 30 }}>
+        <div style={{ display: "flex", color: `${arr[2].c}`, fontSize: 30 }}>
           {arr[2].addr} ✅ {Math.round(arr[2].amt * 1e3) / 1e3} {arr[2].f}
         </div>
-        <div style={{ display: "flex", color: `${arr[0].c}`, fontSize: 30 }}>
+        <div style={{ display: "flex", color: `${arr[3].c}`, fontSize: 30 }}>
           {arr[3].addr} ✅ {Math.round(arr[3].amt * 1e3) / 1e3} {arr[3].f}
         </div>
-        <div style={{ display: "flex", color: `${arr[0].c}`, fontSize: 30 }}>
+        <div style={{ display: "flex", color: `${arr[4].c}`, fontSize: 30 }}>
           {arr[4].addr} ✅ {Math.round(arr[4].amt * 1e3) / 1e3} {arr[4].f}
         </div>
       </div>
