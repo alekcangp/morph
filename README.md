@@ -30,7 +30,7 @@ Frame 5 - Transaction complete
 Frame 6 - Contributors
   - Show last 5 contributors which sent assets to the faucet address: date, address or username, amount
   - Link to the faucet address on the blockchain explorer
-  - 
+
     
 <center>
   
