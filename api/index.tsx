@@ -139,56 +139,56 @@ app.frame("/setup", (c) => {
   });
 });
 
+// fetch farcaster username by address
+async function alia(addr, ad) {
+  const val = await fetch("https://searchcaster.xyz/api/profiles?address=" + addr );
+  let ob = await val.json();
+  return ob.length > 0 ? ob[0].body.displayName : ad;
+}
+
 app.frame("/contribute", async (c) => {
   const url = "https://explorer-testnet.morphl2.io/address/" + fa;
-  const rtok = await fetch(
-    "https://explorer-api-testnet.morphl2.io/api/v2/addresses/" +
-      fa +
-      "/token-transfers?token=" +
-      usdtAddress,
-  );
+  const rtok = await fetch("https://explorer-api-testnet.morphl2.io/api/v2/addresses/" +  fa + "/token-transfers?token=" + usdtAddress );
   const tok = await rtok.json();
-  const rcoi = await fetch(
-    "https://explorer-api-testnet.morphl2.io/api/v2/addresses/" +
-      fa +
-      "/transactions",
-  );
-
+  const rcoi = await fetch("https://explorer-api-testnet.morphl2.io/api/v2/addresses/" +  fa + "/transactions");
   const coi = await rcoi.json();
-  //console.log(int);
-  const co = tok.items.concat(coi.items);
-  const txs = co.sort((a, b) => {
+  const txs = tok.items.concat(coi.items).sort((a, b) => {
     return new Date(b.timestamp).valueOf() - new Date(a.timestamp).valueOf();
   });
-  //console.log(txs[1]);
+  
   const arr = [];
+  var ii = 0;
 
   for (let i = 0; i < txs.length; i++) {
-    if (
-      txs[i].to.hash == fa &&
-      txs[i].from.hash != fa &&
-      txs[i].from.hash != ethl2
-    ) {
+    if (ii > 4) break;
+    const addr = txs[i].from.hash;
+    const tim = txs[i].timestamp.substring(0, 10);
+    var match = addr.match(/^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/);
+    var ad = match[1] + " 🙂 🙂 🙂 " + match[2];
+
+    if (txs[i].to.hash == fa && addr != fa && addr != ethl2) {
       if (txs[i]["method"] === null) {
+        ii += 1;
         arr.push({
-          addr: txs[i]["from"]["hash"],
+          addr: alia(addr, ad),
           amt: ethers.formatEther(txs[i]["value"]),
           f: "ETH",
-          c: "lime"
+          c: "lime",
+          t: tim,
         });
       }
       if (txs[i]["method"] == "transfer") {
+        ii += 1;
         arr.push({
-          addr: txs[i]["from"]["hash"],
+          addr: alia(addr, ad),
           amt: ethers.formatUnits(txs[i]["total"]["value"], 18),
           f: "USDT",
-          c: "pink"
+          c: "pink",
+          t: tim,
         });
       }
     }
   }
-  // console.log(arr);
-
   return c.res({
     image: (
       <div
@@ -198,8 +198,6 @@ app.frame("/contribute", async (c) => {
           backgroundSize: "100%, 100%",
           color: "white",
           fontSize: 60,
-          marginTop: 30,
-          lineHeight: 1.8,
           display: "flex",
           textAlign: "center",
           alignItems: "center",
@@ -210,20 +208,33 @@ app.frame("/contribute", async (c) => {
         }}
       >
         CONTRIBUTORS
-        <div style={{ display: "flex", color: `${arr[0].c}`, fontSize: 30 }}>
-          {arr[0].addr} ✅ {Math.round(arr[0].amt * 1e3) / 1e3} {arr[0].f}
-        </div>
-        <div style={{ display: "flex", color: `${arr[1].c}`, fontSize: 30 }}>
-          {arr[1].addr} ✅ {Math.round(arr[1].amt * 1e3) / 1e3} {arr[1].f}
-        </div>
-        <div style={{ display: "flex", color: `${arr[2].c}`, fontSize: 30 }}>
-          {arr[2].addr} ✅ {Math.round(arr[2].amt * 1e3) / 1e3} {arr[2].f}
-        </div>
-        <div style={{ display: "flex", color: `${arr[3].c}`, fontSize: 30 }}>
-          {arr[3].addr} ✅ {Math.round(arr[3].amt * 1e3) / 1e3} {arr[3].f}
-        </div>
-        <div style={{ display: "flex", color: `${arr[4].c}`, fontSize: 30 }}>
-          {arr[4].addr} ✅ {Math.round(arr[4].amt * 1e3) / 1e3} {arr[4].f}
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            flexDirection: "column",
+          }}
+        >
+          <p style={{ color: `${arr[0].c}` }}>
+            {arr[0].t} 🕓 {arr[0].addr} ✅ {Math.round(arr[0].amt * 1e3) / 1e3}
+            {arr[0].f}
+          </p>
+          <p style={{ color: `${arr[1].c}` }}>
+            {arr[1].t} 🕓 {arr[1].addr} ✅ {Math.round(arr[1].amt * 1e3) / 1e3}
+            {arr[1].f}
+          </p>
+          <p style={{ color: `${arr[2].c}` }}>
+            {arr[2].t} 🕓 {arr[2].addr} ✅ {Math.round(arr[2].amt * 1e3) / 1e3}
+            {arr[2].f}
+          </p>
+          <p style={{ color: `${arr[3].c}` }}>
+            {arr[3].t} 🕓 {arr[3].addr} ✅ {Math.round(arr[3].amt * 1e3) / 1e3}
+            {arr[3].f}
+          </p>
+          <p style={{ color: `${arr[4].c}` }}>
+            {arr[4].t} 🕓 {arr[4].addr} ✅ {Math.round(arr[4].amt * 1e3) / 1e3}
+            {arr[4].f}
+          </p>
         </div>
       </div>
     ),
