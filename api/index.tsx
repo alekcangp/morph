@@ -272,7 +272,7 @@ app.frame("/faucet", async (c) => {
       </div>
     ),
     intents: [
-      <TextInput placeholder="Enter address or Farcaster name" />,
+      <TextInput placeholder="Wallet address or Farcaster name" />,
       <Button action="/main">&laquo; Back</Button>,
       <Button action="/tx">0.01 ETH</Button>,
       <Button action="/tx">1 USDT</Button>,
