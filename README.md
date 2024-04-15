@@ -20,8 +20,8 @@ Frame 3 - Setup wallet
     
 Frame 4 - Faucet
   - Enter wallet address 0x... or Farcaster username
-  - Send 0.01 ETH to user's wallet on Morph L2 and got to Frame 5
-  - Send 1 USDT to user's wallet on Morph L2 and got to Frame 5
+  - Send 0.01 ETH to user's wallet on Morph L2 and go to Frame 5
+  - Send 1 USDT to user's wallet on Morph L2 and go to Frame 5
   - Go to Contributors
     
 Frame 5 - Transaction complete
@@ -30,6 +30,7 @@ Frame 5 - Transaction complete
 Frame 6 - Contributors
   - Show last 5 contributors which sent assets to the faucet address: date, address or username, amount
   - Link to the faucet address on the blockchain explorer
+  - 
     
 <center>
   
