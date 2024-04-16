@@ -168,7 +168,7 @@ app.frame("/contribute", async (c) => {
     var match = addr.match(/^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/);
     var ad = match[1] + " 🙂 🙂 🙂 " + match[2];
 
-    if (txs[i].to.hash == fa && addr != fa && addr != ethl2) {
+    if (txs[i].to && txs[i].to.hash == fa && addr != fa && addr != ethl2) {
       if (txs[i]["method"] === null) {
         ii += 1;
         arr.push({
