@@ -166,7 +166,7 @@ app.frame("/contribute", async (c) => {
     const addr = txs[i].from.hash;
     const tim = txs[i].timestamp.substring(0, 10);
     var match = addr.match(/^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/);
-    var ad = match[1] + " 🙂 🙂 🙂 " + match[2];
+    var ad = match[1] + "..." + match[2];
 
     if (txs[i].to && txs[i].to.hash == fa && addr != fa && addr != ethl2) {
       if (txs[i]["method"] === null) {
