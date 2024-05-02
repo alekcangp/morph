@@ -281,7 +281,7 @@ app.frame("/faucet", async (c) => {
         <div style={{ display: "flex", color: "violet" }}>
           USDT: {Math.round(usdbal * 1e2) / 1e2}
         </div>
-        <div style={{ display: "flex", color: "pink" }}>
+        <div style={{ display: "flex", color: "pink",  fontSize: 30}}>
           Use https://morph.loophole.site/dev to get 0.1 ETH and 5 USDT.
         </div>
       </div>
